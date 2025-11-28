@@ -13,7 +13,9 @@ export LD_PRELOAD="${TCMALLOC}"
 export PYTHONUNBUFFERED=true
 export HF_HOME="/workspace"
 
-export TRANSPARENT_BACKGROUND_FILE_PATH=/runpod-volume/.transparent-background
+# Set InSPyReNet background-removal model path to the model downloaded
+# from Google drive into the Docker container
+export TRANSPARENT_BACKGROUND_FILE_PATH=/root/.transparent-background
 
 cd /workspace/ComfyUI
 python main.py --port 3000 --temp-directory /tmp > /workspace/logs/comfyui-serverless.log 2>&1 &
