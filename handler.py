@@ -701,7 +701,8 @@ def handler(event):
         logging.error(f'An exception was raised: {e}', job_id)
 
         return {
-            'error': traceback.format_exc(),
+            'error': str(e),
+            'output': traceback.format_exc(),
             'refresh_worker': True
         }
 
