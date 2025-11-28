@@ -39,7 +39,7 @@ RUN apt update && \
 RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # Install Worker dependencies
-RUN pip install requests runpod==1.8.1
+RUN pip install requests runpod==1.7.10
 
 # Install InSPyReNet transparent background model used by the transparent-background Python
 # module (https://github.com/plemeri/transparent-background) so it doesn't have to be
