@@ -4,7 +4,7 @@ You can either build this Docker image yourself, your alternatively,
 you can use my pre-built image:
 
 ```
-ashleykza/runpod-worker-comfyui:3.5.1
+ashleykza/runpod-worker-comfyui:3.6.2
 ```
 
 If you choose to build it yourself:
@@ -23,7 +23,7 @@ docker push dockerhub-username/runpod-worker-comfyui:1.0.0
 ```
 
 If you're building on an M1 or M2 Mac, there will be an architecture
-mismatch because they are `arm64`, but RunPod runs on `amd64`
+mismatch because they are `arm64`, but Runpod runs on `amd64`
 architecture, so you will have to add the `--plaform` as follows:
 
 ```bash

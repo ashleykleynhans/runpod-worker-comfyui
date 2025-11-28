@@ -51,7 +51,7 @@ def handle_response(resp_json, timer):
         print(json.dumps(resp_json, indent=4, default=str))
 
     total_time = timer.get_elapsed_time()
-    print(f'Total time taken for RunPod Serverless API call {total_time} seconds')
+    print(f'Total time taken for Runpod Serverless API call {total_time} seconds')
 
 
 def post_request(payload):
@@ -96,29 +96,29 @@ def post_request(payload):
                         },
                     )
 
-                    print(f'Status code from RunPod status endpoint: {r.status_code}')
+                    print(f'Status code from Runpod status endpoint: {r.status_code}')
 
                     if r.status_code == 200:
                         resp_json = r.json()
                         job_status = resp_json.get('status', STATUS_FAILED)
 
                         if job_status == STATUS_IN_QUEUE or job_status == STATUS_IN_PROGRESS:
-                            print(f'RunPod request {request_id} is {job_status}, sleeping for 5 seconds...')
+                            print(f'Runpod request {request_id} is {job_status}, sleeping for 5 seconds...')
                             time.sleep(5)
                         elif job_status == STATUS_FAILED:
                             request_in_queue = False
-                            print(f'RunPod request {request_id} failed')
+                            print(f'Runpod request {request_id} failed')
                             print(json.dumps(resp_json, indent=4, default=str))
                         elif job_status == STATUS_COMPLETED:
                             request_in_queue = False
-                            print(f'RunPod request {request_id} completed')
+                            print(f'Runpod request {request_id} completed')
                             handle_response(resp_json, timer)
                         elif job_status == STATUS_TIMED_OUT:
                             request_in_queue = False
-                            print(f'ERROR: RunPod request {request_id} timed out')
+                            print(f'ERROR: Runpod request {request_id} timed out')
                         else:
                             request_in_queue = False
-                            print(f'ERROR: Invalid status response from RunPod status endpoint')
+                            print(f'ERROR: Invalid status response from Runpod status endpoint')
                             print(json.dumps(resp_json, indent=4, default=str))
             elif job_status == STATUS_COMPLETED \
                     and 'output' in resp_json \

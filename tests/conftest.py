@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 @pytest.fixture
 def mock_runpod_logger():
-    """Mock RunPod logger."""
+    """Mock Runpod logger."""
     with patch('handler.RunPodLogger') as mock_logger:
         mock_instance = MagicMock()
         mock_logger.return_value = mock_instance
@@ -18,7 +18,7 @@ def mock_runpod_logger():
 
 @pytest.fixture
 def sample_event():
-    """Sample RunPod event for testing."""
+    """Sample Runpod event for testing."""
     return {
         'id': 'test-job-123',
         'input': {

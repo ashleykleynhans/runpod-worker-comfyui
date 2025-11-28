@@ -1,4 +1,4 @@
-# Runpod Testing
+# Runpod Examples
 
 ## Create and activate Python venv
 
@@ -23,13 +23,13 @@ cd examples
 cp .env.example .env
 ```
 
-Edit the .env file and add your RunPod API key to
+Edit the .env file and add your Runpod API key to
 `RUNPOD_API_KEY` and your endpoint ID to
 `RUNPOD_ENDPOINT_ID`.  Without these credentials,
-the tests will attempt to run locally instead of
-on RunPod.
+the examples will attempt to run locally instead of
+on Runpod.
 
-## Run test scripts
+## Run example scripts
 
 Once the venv is created and activated, the requirements
 installed, and the credentials added to the .env

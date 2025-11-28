@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3db3a479-64d9-4652-bcc3-dd72e3e0a612",
-		"name": "RunPod ComfyUI Worker",
+		"name": "Runpod ComfyUI Worker",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "446783"
 	},

@@ -529,7 +529,7 @@ def get_container_disk_info(job_id=None):
 
 
 # ---------------------------------------------------------------------------- #
-#                                RunPod Handler                                #
+#                                Runpod Handler                                #
 # ---------------------------------------------------------------------------- #
 def handler(event):
     job_id = event['id']
@@ -677,8 +677,8 @@ def handler(event):
                             exception_message = value['exception_message']
                             raise RuntimeError(f'{node_type}: {exception_message}')
                         else:
-                            # Log to file instead of RunPod because the output tends to be too verbose
-                            # and gets dropped by RunPod logging
+                            # Log to file instead of Runpod because the output tends to be too verbose
+                            # and gets dropped by Runpod logging
                             error_msg = f'Job did not process successfully for prompt_id: {prompt_id}'
                             logging.error(error_msg, job_id)
                             logging.info(f'{job_id}: Response JSON: {resp_json}', job_id)
@@ -728,7 +728,7 @@ if __name__ == '__main__':
     setup_logging()
     wait_for_service(url=f'{BASE_URI}/system_stats')
     logging.info('ComfyUI API is ready')
-    logging.info('Starting RunPod Serverless...')
+    logging.info('Starting Runpod Serverless...')
     runpod.serverless.start(
         {
             'handler': handler

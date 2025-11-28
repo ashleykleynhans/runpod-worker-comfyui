@@ -48,7 +48,7 @@ RUN pip install gdown && \
   mkdir -p /root/.transparent-background && \
   gdown 13oBl5MTVcWER3YU4fSxW3ATlVfueFQPY -O /root/.transparent-background/ckpt_base.pth
 
-# Add RunPod Handler and Docker container start script
+# Add Runpod Handler and Docker container start script
 COPY start.sh handler.py ./
 
 # Add validation schemas

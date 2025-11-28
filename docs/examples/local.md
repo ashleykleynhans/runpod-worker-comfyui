@@ -1,4 +1,4 @@
-# Local Testing
+# Local Examples
 
 ## Create and activate Python venv
 
@@ -20,10 +20,10 @@ If you have added your `RUNPOD_API_KEY` and
 this directory, you should first comment them
 out before attempting to test locally.  If
 the .env file exists and the values are provided,
-the tests will attempt to send the requests to
-your RunPod endpoint instead of running locally.
+the examples will attempt to send the requests to
+your Runpod endpoint instead of running locally.
 
-## Run test scripts
+## Run example scripts
 
 Once the venv is created and activated, the requirements
 installed, and the credentials removed from the .env

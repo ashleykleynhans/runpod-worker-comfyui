@@ -1,9 +1,9 @@
 # Install ComfyUI on your Network Volume
 
-1. [Create a RunPod Account](https://runpod.io?ref=2xxro4sy).
-2. Create a [RunPod Network Volume](https://www.runpod.io/console/user/storage).
+1. [Create a Runpod Account](https://runpod.io?ref=2xxro4sy).
+2. Create a [Runpod Network Volume](https://www.runpod.io/console/user/storage).
 3. Attach the Network Volume to a Secure Cloud [GPU pod](https://www.runpod.io/console/gpu-secure-cloud).
-4. Select the RunPod Pytorch 2 template.
+4. Select the Runpod Pytorch 2 template.
 5. Deploy the GPU Cloud pod.
 6. Once the pod is up, open a Terminal and install the required
    dependencies. This can either be done by using the installation

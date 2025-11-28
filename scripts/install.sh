@@ -32,7 +32,7 @@ git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-M
 cd custom_nodes/ComfyUI-Manager
 pip3 install -r requirements.txt
 
-echo "Installing RunPod Serverless dependencies"
+echo "Installing Runpod Serverless dependencies"
 pip3 install huggingface_hub runpod
 
 echo "Downloading SD 1.5 base model"
