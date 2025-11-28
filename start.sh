@@ -12,6 +12,9 @@ TCMALLOC="$(ldconfig -p | grep -Po "libtcmalloc.so.\d" | head -n 1)"
 export LD_PRELOAD="${TCMALLOC}"
 export PYTHONUNBUFFERED=true
 export HF_HOME="/workspace"
+
+export TRANSPARENT_BACKGROUND_FILE_PATH=/runpod-volume/.transparent-background
+
 cd /workspace/ComfyUI
 python main.py --port 3000 --temp-directory /tmp > /workspace/logs/comfyui-serverless.log 2>&1 &
 deactivate
