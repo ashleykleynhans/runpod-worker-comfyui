@@ -39,7 +39,14 @@ RUN apt update && \
 RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # Install Worker dependencies
-RUN pip install requests runpod==1.7.10
+RUN pip install requests runpod==1.8.1
+
+# Install InSPyReNet transparent background model used by the transparent-background Python
+# module (https://github.com/plemeri/transparent-background) so it doesn't have to be
+# downloaded from Google Drive at run time - this increases stability and performance.
+RUN pip install gdown && \
+  mkdir -p /root/.transparent-background && \
+  gdown 13oBl5MTVcWER3YU4fSxW3ATlVfueFQPY -O /root/.transparent-background/ckpt_base.pth
 
 # Add RunPod Handler and Docker container start script
 COPY start.sh handler.py ./
