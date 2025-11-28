@@ -2,3 +2,9 @@ Pillow
 requests
 python-dotenv
 runpod
+
+# Testing
+pytest
+pytest-cov
+pytest-mock
+coverage[toml]

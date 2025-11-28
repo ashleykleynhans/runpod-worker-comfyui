@@ -1,0 +1,29 @@
+[run]
+source = .
+branch = True
+omit =
+    tests/*
+    venv/*
+    */__pycache__/*
+    *.pyc
+    setup.py
+    conftest.py
+    api_example.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+fail_under = 0
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml
