@@ -19,7 +19,8 @@ if __name__ == '__main__':
                 "prompt": "masterpiece best quality man wearing a hat",
                 "negative_prompt": "bad hands"
             }
-        }
+        },
+        "webhookV2": "https://4c23-45-222-4-0.ngrok-free.app?token=helloworld"
     }
 
     post_request(payload)

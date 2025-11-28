@@ -27,11 +27,11 @@ your RunPod endpoint instead of running locally.
 
 Once the venv is created and activated, the requirements
 installed, and the credentials removed from the .env
-file, you can change directory to the `tests` directory
+file, you can change directory to the `examples` directory
 and run a script, for example:
 
 ```bash
-cd tests
+cd examples
 python txt2img.py
 ```
 

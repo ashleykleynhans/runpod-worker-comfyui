@@ -19,7 +19,7 @@ Copy the `.env.example` file to '.env' as
 follows:
 
 ```bash
-cd tests
+cd examples
 cp .env.example .env
 ```
 
