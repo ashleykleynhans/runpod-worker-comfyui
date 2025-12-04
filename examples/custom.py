@@ -4,16 +4,17 @@ import random
 import json
 
 
-with open('9c803452-0ec2-46cd-b388-0129b8b0983c.json', 'r') as payload_file:
+with open('comfyui-payload.json', 'r') as payload_file:
     payload_json = payload_file.read()
 
 if __name__ == '__main__':
-    payload = {
-        "input": {
-            "workflow": "custom",
-            "payload": json.loads(payload_json)
+    payload = json.loads(payload_json)
+    if not 'input' in payload:
+        payload = {
+            "input": payload
         }
-    }
+
+    #print(json.dumps(payload, indent=2, default=str))
 
 #    seed = random.randrange(1, 1000000)
 

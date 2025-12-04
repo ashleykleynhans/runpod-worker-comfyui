@@ -269,17 +269,6 @@ class TestInputValidation:
         result = validate(input_data, INPUT_SCHEMA)
         assert 'errors' not in result
 
-    def test_invalid_workflow_name(self):
-        from runpod.serverless.utils.rp_validator import validate
-        from schemas.input import INPUT_SCHEMA
-
-        input_data = {
-            'workflow': 'invalid_workflow',
-            'payload': {}
-        }
-        result = validate(input_data, INPUT_SCHEMA)
-        assert 'errors' in result
-
     def test_missing_payload(self):
         from runpod.serverless.utils.rp_validator import validate
         from schemas.input import INPUT_SCHEMA

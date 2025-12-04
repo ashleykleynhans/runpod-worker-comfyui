@@ -1,7 +1,7 @@
 Pillow
 requests
 python-dotenv
-runpod
+runpod==1.7.10
 
 # Testing
 pytest
