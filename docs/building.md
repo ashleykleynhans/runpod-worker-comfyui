@@ -1,11 +1,16 @@
 ## Building the Docker image
 
-You can either build this Docker image yourself, your alternatively,
-you can use my pre-built image:
+You can either build this Docker image yourself, or alternatively,
+you can use one of my pre-built images:
 
-```
-ashleykza/runpod-worker-comfyui:3.7.0
-```
+### Pre-built Images
+
+| CUDA Version  | Torch | xformers     | Image                                                            |
+|---------------|-------|--------------|------------------------------------------------------------------|
+| 12.4          | 2.6.0 | 0.0.29.post3 | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.1-cuda12.4.1` |
+| 12.8          | 2.9.1 | 0.0.33       | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.1-cuda12.8.1` |
+
+### Building Yourself
 
 If you choose to build it yourself:
 

@@ -18,7 +18,14 @@ export HF_HOME="/workspace"
 export TRANSPARENT_BACKGROUND_FILE_PATH=/root/.transparent-background
 
 cd /workspace/ComfyUI
-python main.py --port 3000 --temp-directory /tmp > /workspace/logs/comfyui-serverless.log 2>&1 &
+
+# Disable xformers for CUDA 12.8
+EXTRA_ARGS=""
+if [ "${CUDA_SHORT}" = "cu128" ]; then
+    EXTRA_ARGS="--disable-xformers"
+fi
+
+python main.py --port 3000 --temp-directory /tmp ${EXTRA_ARGS} > /workspace/logs/comfyui-serverless.log 2>&1 &
 deactivate
 
 echo "Starting Runpod Handler"
