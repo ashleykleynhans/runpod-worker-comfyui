@@ -1,8 +1,16 @@
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+ARG CUDA_VERSION=12.4.1
+FROM nvidia/cuda:${CUDA_VERSION}-cudnn-devel-ubuntu22.04
+
+ARG TORCH_VERSION=2.6.0
+ARG XFORMERS_VERSION=0.0.29.post3
+ARG CUDA_SHORT=cu124
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_PREFER_BINARY=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    TORCH_VERSION=${TORCH_VERSION} \
+    XFORMERS_VERSION=${XFORMERS_VERSION} \
+    CUDA_SHORT=${CUDA_SHORT}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

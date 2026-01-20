@@ -1,4 +1,29 @@
 #!/usr/bin/env bash
+
+# Default to CUDA 12.4 if no argument provided
+CUDA_VERSION="${1:-12.4}"
+
+# Set torch and xformers versions based on CUDA version
+case "$CUDA_VERSION" in
+    "12.4")
+        TORCH_VERSION="2.6.0"
+        XFORMERS_VERSION="0.0.29.post3"
+        CUDA_SHORT="cu124"
+        ;;
+    "12.8")
+        TORCH_VERSION="2.9.1"
+        XFORMERS_VERSION="0.0.33"
+        CUDA_SHORT="cu128"
+        ;;
+    *)
+        echo "Unsupported CUDA version: $CUDA_VERSION"
+        echo "Supported versions: 12.4, 12.8"
+        exit 1
+        ;;
+esac
+
+echo "Installing with CUDA $CUDA_VERSION, Torch $TORCH_VERSION, xformers $XFORMERS_VERSION"
+
 echo "Deleting ComfyUI"
 rm -rf /workspace/ComfyUI
 
@@ -19,10 +44,10 @@ python -m venv /workspace/venv
 source /workspace/venv/bin/activate
 
 echo "Installing Torch"
-pip3 install --no-cache-dir torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+pip3 install --no-cache-dir torch==${TORCH_VERSION} torchvision torchaudio --index-url https://download.pytorch.org/whl/${CUDA_SHORT}
 
 echo "Installing xformers"
-pip3 install --no-cache-dir xformers==0.0.29.post3 --index-url https://download.pytorch.org/whl/cu124
+pip3 install --no-cache-dir xformers==${XFORMERS_VERSION} --index-url https://download.pytorch.org/whl/${CUDA_SHORT}
 
 echo "Installing ComfyUI"
 pip3 install -r requirements.txt

@@ -15,6 +15,8 @@ jobs:
       release: ${{ steps.extract.outputs.release }}
       app: ${{ steps.extract.outputs.app }}
       registry_user: ${{ steps.extract.outputs.registry_user }}
+      cuda_version_124: ${{ steps.extract.outputs.cuda_version_124 }}
+      cuda_version_128: ${{ steps.extract.outputs.cuda_version_128 }}
       should_build: ${{ steps.check.outputs.should_build }}
     steps:
       - name: Checkout code
@@ -28,14 +30,20 @@ jobs:
           RELEASE=$(grep 'variable "RELEASE"' -A 2 docker-bake.hcl | grep 'default' | sed 's/.*"\(.*\)"/\1/')
           APP=$(grep 'variable "APP"' -A 2 docker-bake.hcl | grep 'default' | sed 's/.*"\(.*\)"/\1/')
           REGISTRY_USER=$(grep 'variable "REGISTRY_USER"' -A 2 docker-bake.hcl | grep 'default' | sed 's/.*"\(.*\)"/\1/')
+          CUDA_VERSION_124=$(grep 'variable "CUDA_VERSION_124"' -A 2 docker-bake.hcl | grep 'default' | sed 's/.*"\(.*\)"/\1/')
+          CUDA_VERSION_128=$(grep 'variable "CUDA_VERSION_128"' -A 2 docker-bake.hcl | grep 'default' | sed 's/.*"\(.*\)"/\1/')
 
           echo "release=${RELEASE}" >> $GITHUB_OUTPUT
           echo "app=${APP}" >> $GITHUB_OUTPUT
           echo "registry_user=${REGISTRY_USER}" >> $GITHUB_OUTPUT
+          echo "cuda_version_124=${CUDA_VERSION_124}" >> $GITHUB_OUTPUT
+          echo "cuda_version_128=${CUDA_VERSION_128}" >> $GITHUB_OUTPUT
 
           echo "Current RELEASE: ${RELEASE}"
           echo "Current APP: ${APP}"
           echo "Current REGISTRY_USER: ${REGISTRY_USER}"
+          echo "CUDA_VERSION_124: ${CUDA_VERSION_124}"
+          echo "CUDA_VERSION_128: ${CUDA_VERSION_128}"
 
       - name: Check if RELEASE changed
         id: check
@@ -118,67 +126,86 @@ jobs:
 
       - name: Create temporary docker-bake override file
         run: |
-          # Create an override file that forces ghcr.io
+          # Create an override file that forces ghcr.io for both CUDA targets
           cat > docker-bake.override.hcl << 'EOF'
-          target "default" {
-            inherits = ["default"]
-            tags = ["ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}"]
+          target "cuda124" {
+            tags = ["ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}-cuda${{ needs.detect-changes.outputs.cuda_version_124 }}"]
+          }
+
+          target "cuda128" {
+            tags = ["ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}-cuda${{ needs.detect-changes.outputs.cuda_version_128 }}"]
           }
           EOF
 
           echo "Override file created:"
           cat docker-bake.override.hcl
 
-      - name: Build and push Docker image
+      - name: Build and push Docker images
         run: |
-          echo "Building and pushing Docker image to ghcr.io..."
+          echo "Building and pushing Docker images to ghcr.io..."
 
           # Show what will be built
           echo "Configuration:"
-          docker buildx bake -f docker-bake.hcl -f docker-bake.override.hcl --print default
+          docker buildx bake -f docker-bake.hcl -f docker-bake.override.hcl --print
 
           echo ""
           echo "Starting build..."
 
-          # Build with both files - override will take precedence for tags
-          docker buildx bake -f docker-bake.hcl -f docker-bake.override.hcl --push default
+          # Build both targets - override will take precedence for tags
+          docker buildx bake -f docker-bake.hcl -f docker-bake.override.hcl --push
 
           echo "Build completed!"
 
-      - name: Verify image was pushed
+      - name: Verify images were pushed
         run: |
-          IMAGE="ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}"
-          echo "Verifying image: $IMAGE"
+          RELEASE="${{ needs.detect-changes.outputs.release }}"
+          APP="${{ needs.detect-changes.outputs.app }}"
+          REGISTRY="ghcr.io"
+          REGISTRY_USER="${{ github.repository_owner }}"
+          CUDA_124="${{ needs.detect-changes.outputs.cuda_version_124 }}"
+          CUDA_128="${{ needs.detect-changes.outputs.cuda_version_128 }}"
 
           # Wait for registry to update
           sleep 10
 
-          # Try to pull the image
-          docker pull $IMAGE && echo "✅ SUCCESS: Image verified: $IMAGE" || echo "❌ FAILED: Could not pull image: $IMAGE"
+          # Verify CUDA 12.4 image
+          IMAGE_124="${REGISTRY}/${REGISTRY_USER}/${APP}:${RELEASE}-cuda${CUDA_124}"
+          echo "Verifying image: $IMAGE_124"
+          docker pull $IMAGE_124 && echo "✅ SUCCESS: Image verified: $IMAGE_124" || echo "❌ FAILED: Could not pull image: $IMAGE_124"
 
-      - name: List built image
+          # Verify CUDA 12.8 image
+          IMAGE_128="${REGISTRY}/${REGISTRY_USER}/${APP}:${RELEASE}-cuda${CUDA_128}"
+          echo "Verifying image: $IMAGE_128"
+          docker pull $IMAGE_128 && echo "✅ SUCCESS: Image verified: $IMAGE_128" || echo "❌ FAILED: Could not pull image: $IMAGE_128"
+
+      - name: List built images
         id: list-images
         run: |
           RELEASE="${{ needs.detect-changes.outputs.release }}"
           APP="${{ needs.detect-changes.outputs.app }}"
           REGISTRY="ghcr.io"
           REGISTRY_USER="${{ github.repository_owner }}"
+          CUDA_124="${{ needs.detect-changes.outputs.cuda_version_124 }}"
+          CUDA_128="${{ needs.detect-changes.outputs.cuda_version_128 }}"
 
-          # Create the image name
-          IMAGE="${REGISTRY}/${REGISTRY_USER}/${APP}:${RELEASE}"
+          # Create the image names
+          IMAGE_124="${REGISTRY}/${REGISTRY_USER}/${APP}:${RELEASE}-cuda${CUDA_124}"
+          IMAGE_128="${REGISTRY}/${REGISTRY_USER}/${APP}:${RELEASE}-cuda${CUDA_128}"
 
           # Create JSON for easier parsing by third-party tools
-          IMAGES_JSON=$(echo "[\"${IMAGE}\"]" | jq -c '.')
+          IMAGES_JSON=$(echo "[\"${IMAGE_124}\", \"${IMAGE_128}\"]" | jq -c '.')
 
           # Output for GitHub Actions
           echo "images<<EOF" >> $GITHUB_OUTPUT
-          echo "$IMAGE" >> $GITHUB_OUTPUT
+          echo "$IMAGE_124" >> $GITHUB_OUTPUT
+          echo "$IMAGE_128" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
           echo "images_json=${IMAGES_JSON}" >> $GITHUB_OUTPUT
 
           # Also write to a file that can be downloaded
-          echo "$IMAGE" > built-images.txt
+          echo "$IMAGE_124" > built-images.txt
+          echo "$IMAGE_128" >> built-images.txt
           echo "$IMAGES_JSON" > built-images.json
 
       - name: Upload image list artifacts
@@ -190,9 +217,9 @@ jobs:
             built-images.json
           retention-days: 90
 
-      - name: Display built image
+      - name: Display built images
         run: |
-          echo "Successfully built and pushed the following image:"
+          echo "Successfully built and pushed the following images:"
           cat built-images.txt
           echo ""
           echo "JSON format:"
@@ -205,20 +232,30 @@ jobs:
     steps:
       - name: Create job summary
         run: |
-          echo "## Docker Image Built" >> $GITHUB_STEP_SUMMARY
+          echo "## Docker Images Built" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Application:** ${{ needs.detect-changes.outputs.app }}" >> $GITHUB_STEP_SUMMARY
           echo "**Release:** ${{ needs.detect-changes.outputs.release }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Image Pushed to GitHub Container Registry:" >> $GITHUB_STEP_SUMMARY
+          echo "### Images Pushed to GitHub Container Registry:" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "${{ needs.build-and-push.outputs.images }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### To pull this image:" >> $GITHUB_STEP_SUMMARY
+          echo "### CUDA Versions:" >> $GITHUB_STEP_SUMMARY
+          echo "| CUDA | Torch | xformers |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 12.4 | 2.6.0 | 0.0.29.post3 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 12.8 | 2.9.1 | 0.0.33 |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### To pull these images:" >> $GITHUB_STEP_SUMMARY
           echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ${{ needs.build-and-push.outputs.images }}" >> $GITHUB_STEP_SUMMARY
+          echo "# CUDA 12.4" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}-cuda${{ needs.detect-changes.outputs.cuda_version_124 }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# CUDA 12.8" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ghcr.io/${{ github.repository_owner }}/${{ needs.detect-changes.outputs.app }}:${{ needs.detect-changes.outputs.release }}-cuda${{ needs.detect-changes.outputs.cuda_version_128 }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Note:** If the image is private, make it public at:" >> $GITHUB_STEP_SUMMARY
+          echo "**Note:** If the images are private, make them public at:" >> $GITHUB_STEP_SUMMARY
           echo "https://github.com/${{ github.repository_owner }}?tab=packages" >> $GITHUB_STEP_SUMMARY
