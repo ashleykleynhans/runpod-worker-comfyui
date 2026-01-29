@@ -11,8 +11,8 @@ case "$CUDA_VERSION" in
         CUDA_SHORT="cu124"
         ;;
     "12.8")
-        TORCH_VERSION="2.9.1"
-        XFORMERS_VERSION="0.0.33"
+        TORCH_VERSION="2.10.0"
+        XFORMERS_VERSION="0.0.34"
         CUDA_SHORT="cu128"
         ;;
     *)

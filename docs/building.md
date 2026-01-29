@@ -5,10 +5,10 @@ you can use one of my pre-built images:
 
 ### Pre-built Images
 
-| CUDA Version  | Torch | xformers     | Image                                                            |
-|---------------|-------|--------------|------------------------------------------------------------------|
-| 12.4          | 2.6.0 | 0.0.29.post3 | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.1-cuda12.4.1` |
-| 12.8          | 2.9.1 | 0.0.33       | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.1-cuda12.8.1` |
+| CUDA Version  | Torch  | xformers     | Image                                                            |
+|---------------|--------|--------------|------------------------------------------------------------------|
+| 12.4          | 2.6.0  | 0.0.29.post3 | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.2-cuda12.4.1` |
+| 12.8          | 2.10.0 | 0.0.34       | `ghcr.io/ashleykleynhans/runpod-worker-comfyui:4.0.2-cuda12.8.1` |
 
 ### Building Yourself
 

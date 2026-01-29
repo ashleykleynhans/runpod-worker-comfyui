@@ -3,7 +3,7 @@
 1. [Create a Runpod Account](https://runpod.io?ref=2xxro4sy).
 2. Create a [Runpod Network Volume](https://www.runpod.io/console/user/storage).
 3. Attach the Network Volume to a Secure Cloud [GPU pod](https://www.runpod.io/console/gpu-secure-cloud).
-4. Select the Runpod Pytorch 2.1 template.
+4. Select the `Runpod Pytorch 2.4.0` template.
 5. Deploy the GPU Cloud pod.
 6. Once the pod is up, open a Terminal and install the required
    dependencies. This can either be done by using the installation
@@ -66,8 +66,8 @@ pip3 install --no-cache-dir torch==2.6.0 torchvision torchaudio --index-url http
 pip3 install --no-cache-dir xformers==0.0.29.post3 --index-url https://download.pytorch.org/whl/cu124
 
 # For CUDA 12.8:
-# pip3 install --no-cache-dir torch==2.9.1 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
-# pip3 install --no-cache-dir xformers==0.0.33 --index-url https://download.pytorch.org/whl/cu128
+# pip3 install --no-cache-dir torch==2.10.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+# pip3 install --no-cache-dir xformers==0.0.34 --index-url https://download.pytorch.org/whl/cu128
 
 # Install ComfyUI
 pip3 install -r requirements.txt

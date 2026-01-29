@@ -11,7 +11,7 @@ variable "APP" {
 }
 
 variable "RELEASE" {
-    default = "4.0.1"
+    default = "4.0.2"
 }
 
 # CUDA 12.4 configuration
@@ -33,11 +33,11 @@ variable "CUDA_VERSION_128" {
 }
 
 variable "TORCH_VERSION_128" {
-    default = "2.9.1"
+    default = "2.10.0"
 }
 
 variable "XFORMERS_VERSION_128" {
-    default = "0.0.33"
+    default = "0.0.34"
 }
 
 group "default" {
