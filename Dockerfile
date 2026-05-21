@@ -44,7 +44,7 @@ RUN apt update && \
     apt-get clean -y
 
 # Set Python
-RUN ln -s /usr/bin/python3.10 /usr/bin/python
+RUN ln -s /usr/bin/python3.11 /usr/bin/python
 
 # Install Worker dependencies
 RUN pip install requests runpod==1.7.10
