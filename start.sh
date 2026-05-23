@@ -3,8 +3,7 @@
 echo "Worker Initiated"
 
 echo "Symlinking files from Network Volume"
-rm -rf /workspace && \
-  ln -s /runpod-volume /workspace
+ln -s /workspace /runpod-volume
 
 echo "Starting ComfyUI API"
 source /workspace/venv/bin/activate
@@ -26,7 +25,6 @@ if [ "${CUDA_SHORT}" = "cu128" ]; then
 fi
 
 python main.py --port 3000 --temp-directory /tmp ${EXTRA_ARGS} > /workspace/logs/comfyui-serverless.log 2>&1 &
-deactivate
 
 echo "Starting Runpod Handler"
 python3 -u /handler.py
