@@ -3,7 +3,8 @@
 echo "Worker Initiated"
 
 echo "Symlinking files from Network Volume"
-ln -s /workspace /runpod-volume
+rm -rf /workspace && \
+  ln -s /runpod-volume /workspace
 
 echo "Starting ComfyUI API"
 source /workspace/venv/bin/activate
